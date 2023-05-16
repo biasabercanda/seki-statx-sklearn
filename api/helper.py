@@ -16,9 +16,9 @@ def forecast(data):
   predicted_y = model.predict(future_X)
 
   return{
-     'x' :x,
-     'y' : y,
-     'X' : X,
-     'future_x' : future_X,
-     'predicted_y' : predicted_y
+     'x' :x.tolist(),
+     'y' : y.tolist(),
+     'X' : X.tolist(),
+     'future_x' : future_X.tolist(),
+     'predicted_y' : predicted_y.tolist()
   }
