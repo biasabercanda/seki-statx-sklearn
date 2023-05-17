@@ -19,7 +19,7 @@ class fore(Resource):
         res = forecast(data["data"])
         return json.dumps(res)
     
-@api.representation('applicatoin/json')
+
 class core(Resource):
     def post(self):
         json_data = request.get_json(force=True)
