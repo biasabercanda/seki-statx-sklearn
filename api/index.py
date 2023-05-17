@@ -1,23 +1,43 @@
-from flask import Flask
-from flask_restful import Resource, Api
+from flask import Flask, request
+from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
-from api.helper import forecast
+from helper import forecast, corelation
 import json
+import numpy as np
 
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
+parser = reqparse.RequestParser()
+parser.add_argument("data")
+
 class fore(Resource):
     def post(self):
-        data = [1.07,1.05,1.02,1.02,1.05,1.06,1.03,1.07,1.03,1.02,1.03,1,1,0.97,0.97,0.95,0.97,0.96,0.96,0.98,1.05,1,1.02,1.02,1,0.99,1,0.99,1.03,1.02,1,0.99,0.98,1,0.99,0.99,1,1.03,1.02,1.01,1.04,1.05,1.03,1.05,1.03,1.04,1.06,1.06,1.11,1.11,1.1,1.1,1.08,1.07,1.09,1.09,1.12,1.13,1.14,1.16,1.27,1.25,1.27,1.21,1.25,1.25,1.31,1.31,1.33,1.31,1.34,1.38,1.4,1.35,1.3,1.26,1.31,1.29,1.3,1.31,1.31,1.34,1.34,1.34,1.3,1.33,1.33,1.37,1.35,1.3,1.25,1.25,1.25,1.29,1.29,1.26,1.23,1.28,1.29,1.28,1.3,1.31,1.3,1.3,1.29,1.32,1.33,1.36,1.31,1.32,1.33,1.34,1.35,1.31,1.32,1.33,1.32,1.32,1.33,1.3,1.32,1.34,1.41,1.39,1.38,1.36,1.34,1.3,1.33,1.33,1.3,1.27,1.28,1.27,1.26,1.23,1.21,1.24,1.25,1.26,1.27,1.24,1.28,1.26,1.27,1.27,1.25,1.28,1.26,1.29,1.28,1.31,1.38,1.36,1.34,1.36,1.3306,1.3647,1.3516]
-        res = forecast(data)
+        data = request.get_json(force=True)
+        res = forecast(data["data"])
+        return json.dumps(res)
+    
+@api.representation('applicatoin/json')
+class core(Resource):
+    def post(self):
+        json_data = request.get_json(force=True)
+
+        data_type = json_data["data_type"]
+        year_from = json_data["year_from"]
+        year_to = json_data["year_to"]
+        data1 = np.array(json_data["data1"])
+        data2 = np.array(json_data["data2"])
+
+        res = corelation(data_type,year_from,year_to,data1,data2)
+        
         return json.dumps(res)
     
     
 
-api.add_resource(fore,'/')
+api.add_resource(fore,'/forecast')
+api.add_resource(core,'/corelation')
 
 if __name__ == '__main__':
     app.run(debug=True)
