@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 
 def forecast(data):
   x = np.arange(1, len(data) + 1).reshape(-1, 1)  # Independent variable
@@ -15,12 +16,20 @@ def forecast(data):
   future_X = np.array([[len(data) + 1], [len(data) + 2]])  # Future data points
   predicted_y = model.predict(future_X)
 
+  slope = model.coef_[0]
+  intercept = model.intercept_
+
+  rmse = np.sqrt(mean_squared_error(y, X))
+
   return{
      'x' :x.tolist(),
      'y' : y.tolist(),
      'X' : X.tolist(),
      'future_x' : future_X.tolist(),
-     'predicted_y' : predicted_y.tolist()
+     'predicted_y' : predicted_y.tolist(),
+     'slope':slope,
+     'intercept':intercept,
+     'rmse':rmse
   }
 
 def corelation(data_type,year_from,year_to,data1,data2):
@@ -42,10 +51,13 @@ def corelation(data_type,year_from,year_to,data1,data2):
   slope = model.coef_[0]
   intercept = model.intercept_
 
+  rmse = np.sqrt(mean_squared_error(y, X))
+
   return{
      'x' :x.tolist(),
      'y' : y.tolist(),
      'X' : X.tolist(),
      'slope':slope,
-     'intercept':intercept
+     'intercept':intercept,
+     'rmse':rmse
   }
