@@ -37,8 +37,8 @@ def corelation(data_type,year_from,year_to,data1,data2):
   f = (year_from-base)*12
   t = f+data_type+(year_to-year_from)*data_type
 
-  y = data1[f:t]#independent
-  x = data2 [f:t]#dependent
+  x = data1[f:t]#independent
+  y = data2 [f:t]#dependent
 
   # Create and fit the linear regression model
   model = LinearRegression()
@@ -61,3 +61,35 @@ def corelation(data_type,year_from,year_to,data1,data2):
      'intercept':intercept,
      'rmse':rmse
   }
+
+def corel(features,target):
+   x = np.column_stack(features)
+   y = target
+
+   # Create a linear regression model
+   model = LinearRegression()
+
+   # Fit the model to the data
+   model.fit(x,y)
+   
+   # Predict the target variable
+   X= model.predict(x)
+
+
+   # Retrieve the coefficients and intercept
+   coefs = model.coef_
+   intercept = model.intercept_
+
+   
+
+   rmse = np.sqrt(mean_squared_error(y, X))
+
+   return{
+      'x' :x.tolist(),
+      'y' : y.tolist(),
+      'X' : X.tolist(),
+      'slope':coefs.tolist(),
+      'intercept':intercept,
+      'rmse':rmse
+   }
+
