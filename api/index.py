@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
-from helper import forecast, corelation, corel
+from api.helper import forecast, corelation, corel
 import json
 import numpy as np
 
